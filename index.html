@@ -1,83 +1,509 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phat Pham | Unity Game Developer</title>
+    <title>Salt — Phạm Minh Phát | Unity Game Developer</title>
+    <meta name="description" content="Portfolio of Phạm Minh Phát (Salt) — Unity Game Developer Intern. AI-First advocate, Vibe Coding enthusiast, system architect.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
+                        'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' },
+                        },
+                        'glow-pulse': {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(56,189,248,0.15)' },
+                            '50%': { boxShadow: '0 0 40px rgba(56,189,248,0.3)' },
+                        },
+                        'fade-in-up': {
+                            '0%': { opacity: '0', transform: 'translateY(24px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; }
-        .neon-text { text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #09090b;
+            color: #e4e4e7;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(63, 63, 70, 0.4);
+        }
+
+        .glass-card {
+            background: rgba(24, 24, 27, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(63, 63, 70, 0.3);
+        }
+
+        /* Gradient noise texture overlay */
+        .noise::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Neon glow text */
+        .neon-text {
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4), 0 0 40px rgba(56, 189, 248, 0.1);
+        }
+
+        /* Animated gradient border */
+        .gradient-border {
+            position: relative;
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(56,189,248,0.3), rgba(168,85,247,0.3), rgba(20,184,166,0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .gradient-border:hover::before {
+            opacity: 1;
+        }
+
+        /* Section reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+        .reveal.visible {
+            animation: fade-in-up 0.6s ease-out forwards;
+        }
+
+        /* Hero background blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
     </style>
 </head>
-<body class="antialiased selection:bg-sky-500 selection:text-white">
+<body class="antialiased noise selection:bg-sky-500/30 selection:text-white overflow-x-hidden">
 
-    <header class="min-h-screen flex flex-col justify-center items-center text-center px-4">
-        <div class="mb-6">
-            <img src="https://avatars.githubusercontent.com/u/YOUR_GITHUB_ID" alt="Phat Pham" class="w-32 h-32 rounded-full border-4 border-sky-500 shadow-[0_0_15px_rgba(56,189,248,0.5)] mx-auto object-cover">
-        </div>
-        <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight">Phat <span class="text-sky-400 neon-text">Pham</span></h1>
-        <p class="text-xl md:text-2xl text-slate-400 mb-2">Unity Game Developer Intern</p>
-        <p class="text-md md:text-lg text-slate-500 max-w-2xl mx-auto mb-8">
-            Tập trung vào hệ thống logic, kiến trúc game và phát triển với tư duy AI-First. Bứt phá giới hạn với Vibe Coding.
-        </p>
-        
-        <div class="flex gap-4">
-            <a href="https://github.com/Salt05" target="_blank" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 rounded-full font-medium transition-all border border-slate-700 hover:border-sky-500 flex items-center gap-2">
-                <i class="fab fa-github text-xl"></i> GitHub
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav id="navbar" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 glass rounded-2xl px-2 py-2 transition-all duration-300 opacity-0 translate-y-[-20px]">
+        <div class="flex items-center gap-1">
+            <a href="#" class="px-4 py-2 text-sm font-semibold text-sky-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">
+                Salt<span class="text-zinc-500">.</span>
             </a>
-            <a href="#projects" class="px-6 py-3 bg-sky-500 hover:bg-sky-400 text-slate-900 rounded-full font-bold transition-all shadow-[0_0_10px_rgba(56,189,248,0.4)]">
-                Xem Dự Án
+            <div class="w-px h-4 bg-zinc-700 mx-1 hidden sm:block"></div>
+            <a href="#about" class="px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">About</a>
+            <a href="#projects" class="px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">Projects</a>
+            <a href="#skills" class="px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">Skills</a>
+            <a href="https://github.com/Salt05" target="_blank" rel="noopener noreferrer" class="ml-1 px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">
+                <i class="fab fa-github"></i>
             </a>
         </div>
-    </header>
+    </nav>
 
-    <section id="projects" class="py-20 px-4 md:px-8 max-w-6xl mx-auto">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-3">
-            <span class="w-8 h-1 bg-sky-500 rounded-full"></span> Dự án tiêu biểu
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700 hover:border-sky-500/50 transition-all group">
-                <div class="h-48 bg-slate-900 flex items-center justify-center">
-                    <span class="text-slate-600 font-mono">[Video/GIF Gameplay NumStrata]</span>
-                </div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-bold text-white group-hover:text-sky-400 transition-colors">NumStrata</h3>
-                        <span class="px-3 py-1 bg-sky-500/10 text-sky-400 text-xs rounded-full border border-sky-500/20">Mobile</span>
-                    </div>
-                    <p class="text-slate-400 mb-4 text-sm">2D Pixel Art Math-based puzzle game. Tối ưu hóa hiệu suất và thiết kế kiến trúc hệ thống màn chơi thông minh.</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-2 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">Unity 2D</span>
-                        <span class="px-2 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">C#</span>
-                    </div>
-                </div>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden">
+        <!-- Background blobs -->
+        <div class="blob w-[500px] h-[500px] bg-sky-500 -top-32 -left-32 animate-float" style="animation-delay: 0s;"></div>
+        <div class="blob w-[400px] h-[400px] bg-purple-600 top-1/3 -right-24 animate-float" style="animation-delay: 2s;"></div>
+        <div class="blob w-[300px] h-[300px] bg-teal-500 bottom-16 left-1/4 animate-float" style="animation-delay: 4s;"></div>
+
+        <!-- Subtle grid pattern -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-3xl mx-auto text-center">
+            <!-- Status badge -->
+            <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-8 text-sm animate-fade-in-up" style="animation-delay: 0.1s;">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-400"></span>
+                </span>
+                <span class="text-zinc-400">Open to opportunities</span>
             </div>
 
-            <div class="bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700 hover:border-sky-500/50 transition-all group">
-                <div class="h-48 bg-slate-900 flex items-center justify-center">
-                    <span class="text-slate-600 font-mono">[Video/GIF Physics System]</span>
+            <!-- Greeting -->
+            <p class="text-lg sm:text-xl text-zinc-400 mb-3 font-medium animate-fade-in-up" style="animation-delay: 0.2s;">
+                Hey there, I'm
+            </p>
+
+            <!-- Name -->
+            <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+                <span class="text-white">Phạm Minh </span><span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-400 to-purple-400 neon-text">Phát</span>
+            </h1>
+
+            <!-- Role -->
+            <p class="text-xl sm:text-2xl md:text-3xl text-zinc-300 font-medium mb-6 animate-fade-in-up" style="animation-delay: 0.4s;">
+                Unity Game Developer <span class="text-zinc-600">•</span> <span class="text-sky-400">Salt</span>
+            </p>
+
+            <!-- Philosophy -->
+            <p class="text-base sm:text-lg text-zinc-500 max-w-xl mx-auto mb-10 leading-relaxed animate-fade-in-up" style="animation-delay: 0.5s;">
+                I don't just write code — I <span class="text-zinc-300 font-medium">architect systems</span> and let AI handle the syntax. <br class="hidden sm:block">
+                An advocate for <span class="text-teal-400 font-semibold">Vibe Coding</span> and the <span class="text-sky-400 font-semibold">AI-First</span> approach.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.6s;">
+                <a href="#projects" class="group relative inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-sky-500 to-teal-500 text-zinc-950 font-bold rounded-2xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(56,189,248,0.4)] hover:scale-[1.03] active:scale-[0.98]">
+                    <span>View Projects</span>
+                    <i class="fas fa-arrow-down text-sm transition-transform group-hover:translate-y-0.5"></i>
+                </a>
+                <a href="https://github.com/Salt05" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 px-7 py-3.5 glass rounded-2xl font-medium text-zinc-300 hover:text-white transition-all duration-300 hover:border-zinc-600 hover:scale-[1.03] active:scale-[0.98]">
+                    <i class="fab fa-github text-lg"></i>
+                    <span>GitHub Profile</span>
+                    <i class="fas fa-arrow-up-right-from-square text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div class="w-5 h-8 border-2 border-zinc-700 rounded-full flex justify-center pt-1.5">
+                <div class="w-1 h-2 bg-zinc-500 rounded-full"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ABOUT ME ==================== -->
+    <section id="about" class="relative py-24 sm:py-32 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto reveal">
+            <!-- Section label -->
+            <div class="flex items-center gap-3 mb-12">
+                <span class="text-sm font-mono text-sky-400 tracking-wider uppercase">01</span>
+                <span class="h-px flex-1 bg-gradient-to-r from-zinc-800 to-transparent"></span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">About Me</h2>
+                <span class="h-px flex-1 bg-gradient-to-l from-zinc-800 to-transparent"></span>
+                <span class="text-sm font-mono text-zinc-600 tracking-wider">//</span>
+            </div>
+
+            <div class="grid md:grid-cols-5 gap-8 md:gap-12 items-start">
+                <!-- Text content -->
+                <div class="md:col-span-3 space-y-5">
+                    <p class="text-zinc-400 text-base sm:text-lg leading-relaxed">
+                        I'm <span class="text-white font-semibold">Phạm Minh Phát</span>, but most people call me <span class="text-sky-400 font-semibold">Salt</span>. I'm a Unity Game Developer Intern who believes the future of development lies in working <em>with</em> AI, not against it.
+                    </p>
+                    <p class="text-zinc-400 text-base sm:text-lg leading-relaxed">
+                        Currently on an intensive <span class="text-teal-400 font-medium">3-month AI-First curriculum</span> (started Feb 2026), I'm pushing the boundaries of how games are built — focusing on <span class="text-white font-medium">system design, robust architecture, and backend logic</span> while leveraging AI tools for rapid iteration.
+                    </p>
+                    <p class="text-zinc-400 text-base sm:text-lg leading-relaxed">
+                        My philosophy is simple: understand the <em>why</em> and the <em>structure</em>, then let AI accelerate the <em>how</em>. That's <span class="text-teal-400 font-semibold">Vibe Coding</span>.
+                    </p>
                 </div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-bold text-white group-hover:text-sky-400 transition-colors">Hệ thống Physics phức tạp</h3>
-                        <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-xs rounded-full border border-purple-500/20">PC</span>
+
+                <!-- Info card -->
+                <div class="md:col-span-2 glass-card rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400">
+                            <i class="fas fa-terminal text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-zinc-500">Current Focus</p>
+                            <p class="text-white font-medium text-sm">AI-First Game Dev</p>
+                        </div>
                     </div>
-                    <p class="text-slate-400 mb-4 text-sm">Dự án tập trung vào logic, xử lý va chạm và hệ thống tương tác vật lý phức tạp, tối ưu hóa qua Vibe Coding.</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-2 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">Unity 3D</span>
-                        <span class="px-2 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">Physics Engine</span>
+                    <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
+                        <div class="w-10 h-10 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-400">
+                            <i class="fas fa-gamepad text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-zinc-500">Specialization</p>
+                            <p class="text-white font-medium text-sm">Unity / C# / Systems</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400">
+                            <i class="fas fa-brain text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-zinc-500">Philosophy</p>
+                            <p class="text-white font-medium text-sm">Vibe Coding</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400">
+                            <i class="fas fa-graduation-cap text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-zinc-500">Learning</p>
+                            <p class="text-white font-medium text-sm">3-Month AI Curriculum</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-8 text-center border-t border-slate-800 text-slate-500 text-sm mt-20">
-        <p>© 2026 Phat Pham. Xây dựng với tư duy AI-First.</p>
+    <!-- ==================== PROJECTS ==================== -->
+    <section id="projects" class="relative py-24 sm:py-32 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto reveal">
+            <!-- Section label -->
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-sm font-mono text-sky-400 tracking-wider uppercase">02</span>
+                <span class="h-px flex-1 bg-gradient-to-r from-zinc-800 to-transparent"></span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">Featured Projects</h2>
+                <span class="h-px flex-1 bg-gradient-to-l from-zinc-800 to-transparent"></span>
+                <span class="text-sm font-mono text-zinc-600 tracking-wider">//</span>
+            </div>
+            <p class="text-zinc-500 text-center mb-14 text-sm sm:text-base">Things I've built with system thinking and AI-powered workflows.</p>
+
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+
+                <!-- Project Card: NumStrata -->
+                <div class="group glass-card rounded-2xl overflow-hidden gradient-border transition-all duration-500 hover:shadow-[0_0_40px_rgba(56,189,248,0.08)] hover:-translate-y-1">
+                    <!-- Thumbnail -->
+                    <div class="relative h-52 sm:h-56 bg-gradient-to-br from-zinc-900 via-zinc-900 to-sky-950 flex items-center justify-center overflow-hidden">
+                        <!-- Decorative grid -->
+                        <div class="absolute inset-0 bg-[linear-gradient(rgba(56,189,248,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.04)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+                        <!-- Placeholder icon -->
+                        <div class="relative z-10 text-center">
+                            <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                <i class="fas fa-puzzle-piece text-2xl text-sky-400"></i>
+                            </div>
+                            <p class="text-xs text-zinc-600 font-mono">screenshot / gameplay preview</p>
+                        </div>
+                        <!-- Platform badge -->
+                        <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 backdrop-blur-sm">
+                            <i class="fas fa-mobile-alt mr-1"></i> Mobile
+                        </div>
+                    </div>
+                    <!-- Content -->
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-3">
+                            <h3 class="text-xl font-bold text-white group-hover:text-sky-400 transition-colors duration-300">NumStrata</h3>
+                            <a href="#" class="text-zinc-600 hover:text-sky-400 transition-colors" aria-label="View project">
+                                <i class="fas fa-arrow-up-right-from-square text-sm"></i>
+                            </a>
+                        </div>
+                        <p class="text-zinc-400 text-sm leading-relaxed mb-5">
+                            A 2D pixel art <span class="text-zinc-300">math-based puzzle game</span> for mobile. Features optimized performance, clever UI architecture, and a smart level system designed for scalability and player engagement.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">Unity 2D</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">C#</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">Pixel Art</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">AI Tools</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card: PC Physics System -->
+                <div class="group glass-card rounded-2xl overflow-hidden gradient-border transition-all duration-500 hover:shadow-[0_0_40px_rgba(168,85,247,0.08)] hover:-translate-y-1">
+                    <!-- Thumbnail -->
+                    <div class="relative h-52 sm:h-56 bg-gradient-to-br from-zinc-900 via-zinc-900 to-purple-950 flex items-center justify-center overflow-hidden">
+                        <!-- Decorative grid -->
+                        <div class="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.04)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+                        <!-- Placeholder icon -->
+                        <div class="relative z-10 text-center">
+                            <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                <i class="fas fa-atom text-2xl text-purple-400"></i>
+                            </div>
+                            <p class="text-xs text-zinc-600 font-mono">screenshot / demo preview</p>
+                        </div>
+                        <!-- Platform badge -->
+                        <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 backdrop-blur-sm">
+                            <i class="fas fa-desktop mr-1"></i> PC
+                        </div>
+                    </div>
+                    <!-- Content -->
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-3">
+                            <h3 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors duration-300">PC Physics System</h3>
+                            <a href="#" class="text-zinc-600 hover:text-purple-400 transition-colors" aria-label="View project">
+                                <i class="fas fa-arrow-up-right-from-square text-sm"></i>
+                            </a>
+                        </div>
+                        <p class="text-zinc-400 text-sm leading-relaxed mb-5">
+                            A 3D PC project centered on <span class="text-zinc-300">complex physics interactions</span>, collision handling, and systemic gameplay logic. Built with a focus on precise physics simulations and optimized through Vibe Coding workflows.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">Unity 3D</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">C#</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">Physics Engine</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">AI Tools</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TECH STACK & SKILLS ==================== -->
+    <section id="skills" class="relative py-24 sm:py-32 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto reveal">
+            <!-- Section label -->
+            <div class="flex items-center gap-3 mb-14">
+                <span class="text-sm font-mono text-sky-400 tracking-wider uppercase">03</span>
+                <span class="h-px flex-1 bg-gradient-to-r from-zinc-800 to-transparent"></span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">Tech Stack & Skills</h2>
+                <span class="h-px flex-1 bg-gradient-to-l from-zinc-800 to-transparent"></span>
+                <span class="text-sm font-mono text-zinc-600 tracking-wider">//</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Game Development -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-sky-400 flex items-center gap-2">
+                        <i class="fas fa-gamepad text-xs"></i> Game Development
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">Unity Engine</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">C#</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">2D & 3D</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">Physics Systems</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">Mobile Optimization</span>
+                    </div>
+                </div>
+
+                <!-- Architecture & Design -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-teal-400 flex items-center gap-2">
+                        <i class="fas fa-cubes text-xs"></i> Architecture & Design
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-teal-500/40 transition-all duration-300 cursor-default">System Design</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-teal-500/40 transition-all duration-300 cursor-default">Game Architecture</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-teal-500/40 transition-all duration-300 cursor-default">Level Design</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-teal-500/40 transition-all duration-300 cursor-default">Backend Logic</span>
+                    </div>
+                </div>
+
+                <!-- AI & Tools -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-purple-400 flex items-center gap-2">
+                        <i class="fas fa-wand-magic-sparkles text-xs"></i> AI & Workflow
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">AI-First Dev</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">Vibe Coding</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">Prompt Engineering</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">GitHub Copilot</span>
+                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">Rapid Prototyping</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="relative py-12 px-4 sm:px-6 border-t border-zinc-800/50">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-lg font-bold text-white">Salt<span class="text-sky-400">.</span></span>
+                    <span class="text-zinc-700">|</span>
+                    <span class="text-sm text-zinc-500">Phạm Minh Phát</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="https://github.com/Salt05" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-600 transition-all duration-300 hover:scale-110">
+                        <i class="fab fa-github text-sm"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-zinc-800/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-600">
+                <p>&copy; 2026 Phạm Minh Phát. Built with an AI-First mindset.</p>
+                <p class="font-mono">phatpham.id.vn</p>
+            </div>
+        </div>
     </footer>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // Navbar: show after scrolling past hero
+        const navbar = document.getElementById('navbar');
+        const hero = document.getElementById('hero');
+        const observerNav = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry.isIntersecting) {
+                    navbar.style.opacity = '1';
+                    navbar.style.transform = 'translateX(-50%) translateY(0)';
+                } else {
+                    navbar.style.opacity = '0';
+                    navbar.style.transform = 'translateX(-50%) translateY(-20px)';
+                }
+            },
+            { threshold: 0.15 }
+        );
+        observerNav.observe(hero);
+
+        // Scroll reveal sections
+        const reveals = document.querySelectorAll('.reveal');
+        const observerReveal = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            },
+            { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+        reveals.forEach((el) => observerReveal.observe(el));
+
+        // Smooth active nav link highlighting
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a[href^="#"]');
+        const observerActive = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach((link) => {
+                            link.classList.remove('text-white', 'bg-white/5');
+                            if (link.getAttribute('href') === '#' + entry.target.id) {
+                                link.classList.add('text-white', 'bg-white/5');
+                            }
+                        });
+                    }
+                });
+            },
+            { threshold: 0.3 }
+        );
+        sections.forEach((sec) => observerActive.observe(sec));
+    </script>
 
 </body>
 </html>
