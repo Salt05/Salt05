@@ -65,5 +65,5 @@
   
   <!-- Center Text -->
   <text x="600" y="175" text-anchor="middle" class="greeting-text">HI, I'M</text>
-  <text x="600" y="240" text-anchor="middle" class="name-text">SALT05</text>
+  <text x="600" y="240" text-anchor="middle" class="name-text">SALT</text>
 </svg>

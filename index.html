@@ -1,509 +1,631 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salt — Phạm Minh Phát | Unity Game Developer</title>
-    <meta name="description" content="Portfolio of Phạm Minh Phát (Salt) — Unity Game Developer Intern. AI-First advocate, Vibe Coding enthusiast, system architect.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
-                        'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-12px)' },
-                        },
-                        'glow-pulse': {
-                            '0%, 100%': { boxShadow: '0 0 20px rgba(56,189,248,0.15)' },
-                            '50%': { boxShadow: '0 0 40px rgba(56,189,248,0.3)' },
-                        },
-                        'fade-in-up': {
-                            '0%': { opacity: '0', transform: 'translateY(24px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                    },
-                },
-            },
-        }
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background-color: #09090b;
-            color: #e4e4e7;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grok Fluid Light</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0
+    }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #18181b; }
-        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    html,
+    body {
+      overflow: hidden;
+      background: #000;
+      width: 100vw;
+      height: 100vh
+    }
 
-        /* Glassmorphism utility */
-        .glass {
-            background: rgba(24, 24, 27, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(63, 63, 70, 0.4);
-        }
-
-        .glass-card {
-            background: rgba(24, 24, 27, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(63, 63, 70, 0.3);
-        }
-
-        /* Gradient noise texture overlay */
-        .noise::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
-        /* Neon glow text */
-        .neon-text {
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4), 0 0 40px rgba(56, 189, 248, 0.1);
-        }
-
-        /* Animated gradient border */
-        .gradient-border {
-            position: relative;
-        }
-        .gradient-border::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(56,189,248,0.3), rgba(168,85,247,0.3), rgba(20,184,166,0.3));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .gradient-border:hover::before {
-            opacity: 1;
-        }
-
-        /* Section reveal */
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-        }
-        .reveal.visible {
-            animation: fade-in-up 0.6s ease-out forwards;
-        }
-
-        /* Hero background blobs */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.15;
-            pointer-events: none;
-        }
-    </style>
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh
+    }
+  </style>
 </head>
-<body class="antialiased noise selection:bg-sky-500/30 selection:text-white overflow-x-hidden">
 
-    <!-- ==================== NAVIGATION ==================== -->
-    <nav id="navbar" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 glass rounded-2xl px-2 py-2 transition-all duration-300 opacity-0 translate-y-[-20px]">
-        <div class="flex items-center gap-1">
-            <a href="#" class="px-4 py-2 text-sm font-semibold text-sky-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">
-                Salt<span class="text-zinc-500">.</span>
-            </a>
-            <div class="w-px h-4 bg-zinc-700 mx-1 hidden sm:block"></div>
-            <a href="#about" class="px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">About</a>
-            <a href="#projects" class="px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">Projects</a>
-            <a href="#skills" class="px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">Skills</a>
-            <a href="https://github.com/Salt05" target="_blank" rel="noopener noreferrer" class="ml-1 px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-xl hover:bg-white/5">
-                <i class="fab fa-github"></i>
-            </a>
-        </div>
-    </nav>
+<body>
+  <canvas id="c"></canvas>
+  <script>
+    'use strict';
 
-    <!-- ==================== HERO SECTION ==================== -->
-    <section id="hero" class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden">
-        <!-- Background blobs -->
-        <div class="blob w-[500px] h-[500px] bg-sky-500 -top-32 -left-32 animate-float" style="animation-delay: 0s;"></div>
-        <div class="blob w-[400px] h-[400px] bg-purple-600 top-1/3 -right-24 animate-float" style="animation-delay: 2s;"></div>
-        <div class="blob w-[300px] h-[300px] bg-teal-500 bottom-16 left-1/4 animate-float" style="animation-delay: 4s;"></div>
+    // ========== WebGL Fluid Simulation ==========
+    // Based on Jos Stam "Stable Fluids" & Pavel Dobryakov's implementation
+    // Single-file, zero dependencies
 
-        <!-- Subtle grid pattern -->
-        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none"></div>
+    const canvas = document.getElementById('c');
+    const gl = canvas.getContext('webgl2', {
+      alpha: false,
+      depth: false,
+      stencil: false,
+      antialias: false,
+      preserveDrawingBuffer: true
+    });
 
-        <div class="relative z-10 max-w-3xl mx-auto text-center">
-            <!-- Status badge -->
-            <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-8 text-sm animate-fade-in-up" style="animation-delay: 0.1s;">
-                <span class="relative flex h-2.5 w-2.5">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-400"></span>
-                </span>
-                <span class="text-zinc-400">Open to opportunities</span>
-            </div>
+    if (!gl) {
+      alert('WebGL2 not supported');
+      throw new Error('No WebGL2');
+    }
 
-            <!-- Greeting -->
-            <p class="text-lg sm:text-xl text-zinc-400 mb-3 font-medium animate-fade-in-up" style="animation-delay: 0.2s;">
-                Hey there, I'm
-            </p>
+    gl.getExtension('EXT_color_buffer_float');
+    const supportLinearFiltering = gl.getExtension('OES_texture_float_linear');
 
-            <!-- Name -->
-            <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-4 animate-fade-in-up" style="animation-delay: 0.3s;">
-                <span class="text-white">Phạm Minh </span><span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-400 to-purple-400 neon-text">Phát</span>
-            </h1>
+    // Config
+    const SIM_RES = 128;
+    const DYE_RES = 1024;
+    const DENSITY_DISSIPATION = 1.2;
+    const VELOCITY_DISSIPATION = 0.15;
+    const PRESSURE_ITERATIONS = 20;
+    const CURL_STRENGTH = 25;
+    const SPLAT_RADIUS = 0.0045;
+    const BLOOM_INTENSITY = 2.0;
+    const BLOOM_THRESHOLD = 0.05;
 
-            <!-- Role -->
-            <p class="text-xl sm:text-2xl md:text-3xl text-zinc-300 font-medium mb-6 animate-fade-in-up" style="animation-delay: 0.4s;">
-                Unity Game Developer <span class="text-zinc-600">•</span> <span class="text-sky-400">Salt</span>
-            </p>
+    // Resize
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(canvas.clientWidth * dpr);
+      canvas.height = Math.floor(canvas.clientHeight * dpr);
+    }
+    resize();
+    window.addEventListener('resize', resize);
 
-            <!-- Philosophy -->
-            <p class="text-base sm:text-lg text-zinc-500 max-w-xl mx-auto mb-10 leading-relaxed animate-fade-in-up" style="animation-delay: 0.5s;">
-                I don't just write code — I <span class="text-zinc-300 font-medium">architect systems</span> and let AI handle the syntax. <br class="hidden sm:block">
-                An advocate for <span class="text-teal-400 font-semibold">Vibe Coding</span> and the <span class="text-sky-400 font-semibold">AI-First</span> approach.
-            </p>
+    // Shader compilation
+    function compileShader(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error('Shader error:', gl.getShaderInfoLog(s));
+      }
+      return s;
+    }
 
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.6s;">
-                <a href="#projects" class="group relative inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-sky-500 to-teal-500 text-zinc-950 font-bold rounded-2xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(56,189,248,0.4)] hover:scale-[1.03] active:scale-[0.98]">
-                    <span>View Projects</span>
-                    <i class="fas fa-arrow-down text-sm transition-transform group-hover:translate-y-0.5"></i>
-                </a>
-                <a href="https://github.com/Salt05" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 px-7 py-3.5 glass rounded-2xl font-medium text-zinc-300 hover:text-white transition-all duration-300 hover:border-zinc-600 hover:scale-[1.03] active:scale-[0.98]">
-                    <i class="fab fa-github text-lg"></i>
-                    <span>GitHub Profile</span>
-                    <i class="fas fa-arrow-up-right-from-square text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors"></i>
-                </a>
-            </div>
-        </div>
+    function createProgram(vsSrc, fsSrc) {
+      const vs = compileShader(gl.VERTEX_SHADER, vsSrc);
+      const fs = compileShader(gl.FRAGMENT_SHADER, fsSrc);
+      const p = gl.createProgram();
+      gl.attachShader(p, vs);
+      gl.attachShader(p, fs);
+      gl.linkProgram(p);
+      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+        console.error('Program error:', gl.getProgramInfoLog(p));
+      }
+      const uniforms = {};
+      const n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < n; i++) {
+        const info = gl.getActiveUniform(p, i);
+        uniforms[info.name] = gl.getUniformLocation(p, info.name);
+      }
+      return { program: p, uniforms, bind() { gl.useProgram(p); } };
+    }
 
-        <!-- Scroll indicator -->
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <div class="w-5 h-8 border-2 border-zinc-700 rounded-full flex justify-center pt-1.5">
-                <div class="w-1 h-2 bg-zinc-500 rounded-full"></div>
-            </div>
-        </div>
-    </section>
+    // Fullscreen quad
+    const quadVAO = gl.createVertexArray();
+    gl.bindVertexArray(quadVAO);
+    const quadBuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    gl.bindVertexArray(null);
 
-    <!-- ==================== ABOUT ME ==================== -->
-    <section id="about" class="relative py-24 sm:py-32 px-4 sm:px-6">
-        <div class="max-w-4xl mx-auto reveal">
-            <!-- Section label -->
-            <div class="flex items-center gap-3 mb-12">
-                <span class="text-sm font-mono text-sky-400 tracking-wider uppercase">01</span>
-                <span class="h-px flex-1 bg-gradient-to-r from-zinc-800 to-transparent"></span>
-                <h2 class="text-2xl sm:text-3xl font-bold text-white">About Me</h2>
-                <span class="h-px flex-1 bg-gradient-to-l from-zinc-800 to-transparent"></span>
-                <span class="text-sm font-mono text-zinc-600 tracking-wider">//</span>
-            </div>
+    function blit(target) {
+      gl.bindVertexArray(quadVAO);
+      if (target) {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, target.fbo);
+        gl.viewport(0, 0, target.width, target.height);
+      } else {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      }
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      gl.bindVertexArray(null);
+    }
 
-            <div class="grid md:grid-cols-5 gap-8 md:gap-12 items-start">
-                <!-- Text content -->
-                <div class="md:col-span-3 space-y-5">
-                    <p class="text-zinc-400 text-base sm:text-lg leading-relaxed">
-                        I'm <span class="text-white font-semibold">Phạm Minh Phát</span>, but most people call me <span class="text-sky-400 font-semibold">Salt</span>. I'm a Unity Game Developer Intern who believes the future of development lies in working <em>with</em> AI, not against it.
-                    </p>
-                    <p class="text-zinc-400 text-base sm:text-lg leading-relaxed">
-                        Currently on an intensive <span class="text-teal-400 font-medium">3-month AI-First curriculum</span> (started Feb 2026), I'm pushing the boundaries of how games are built — focusing on <span class="text-white font-medium">system design, robust architecture, and backend logic</span> while leveraging AI tools for rapid iteration.
-                    </p>
-                    <p class="text-zinc-400 text-base sm:text-lg leading-relaxed">
-                        My philosophy is simple: understand the <em>why</em> and the <em>structure</em>, then let AI accelerate the <em>how</em>. That's <span class="text-teal-400 font-semibold">Vibe Coding</span>.
-                    </p>
-                </div>
+    // FBO helpers
+    function createFBO(w, h, internalFormat, format, type, filter) {
+      const tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, w, h, 0, format, type, null);
+      const fbo = gl.createFramebuffer();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+      return {
+        texture: tex, fbo, width: w, height: h,
+        attach(id) { gl.activeTexture(gl.TEXTURE0 + id); gl.bindTexture(gl.TEXTURE_2D, tex); return id; }
+      };
+    }
 
-                <!-- Info card -->
-                <div class="md:col-span-2 glass-card rounded-2xl p-6 space-y-4">
-                    <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
-                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400">
-                            <i class="fas fa-terminal text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-zinc-500">Current Focus</p>
-                            <p class="text-white font-medium text-sm">AI-First Game Dev</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
-                        <div class="w-10 h-10 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-400">
-                            <i class="fas fa-gamepad text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-zinc-500">Specialization</p>
-                            <p class="text-white font-medium text-sm">Unity / C# / Systems</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
-                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400">
-                            <i class="fas fa-brain text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-zinc-500">Philosophy</p>
-                            <p class="text-white font-medium text-sm">Vibe Coding</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400">
-                            <i class="fas fa-graduation-cap text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-zinc-500">Learning</p>
-                            <p class="text-white font-medium text-sm">3-Month AI Curriculum</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    function createDoubleFBO(w, h, internalFormat, format, type, filter) {
+      let fbo1 = createFBO(w, h, internalFormat, format, type, filter);
+      let fbo2 = createFBO(w, h, internalFormat, format, type, filter);
+      return {
+        width: w, height: h,
+        get read() { return fbo1; }, set read(v) { fbo1 = v; },
+        get write() { return fbo2; }, set write(v) { fbo2 = v; },
+        swap() { const t = fbo1; fbo1 = fbo2; fbo2 = t; }
+      };
+    }
 
-    <!-- ==================== PROJECTS ==================== -->
-    <section id="projects" class="relative py-24 sm:py-32 px-4 sm:px-6">
-        <div class="max-w-5xl mx-auto reveal">
-            <!-- Section label -->
-            <div class="flex items-center gap-3 mb-4">
-                <span class="text-sm font-mono text-sky-400 tracking-wider uppercase">02</span>
-                <span class="h-px flex-1 bg-gradient-to-r from-zinc-800 to-transparent"></span>
-                <h2 class="text-2xl sm:text-3xl font-bold text-white">Featured Projects</h2>
-                <span class="h-px flex-1 bg-gradient-to-l from-zinc-800 to-transparent"></span>
-                <span class="text-sm font-mono text-zinc-600 tracking-wider">//</span>
-            </div>
-            <p class="text-zinc-500 text-center mb-14 text-sm sm:text-base">Things I've built with system thinking and AI-powered workflows.</p>
+    // Simulation resolution
+    function getSimRes(res) {
+      const ar = gl.drawingBufferWidth / gl.drawingBufferHeight;
+      let w = Math.round(res * (ar > 1 ? ar : 1));
+      let h = Math.round(res * (ar > 1 ? 1 : 1 / ar));
+      return { width: w, height: h };
+    }
 
-            <!-- Projects Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+    const filter = supportLinearFiltering ? gl.LINEAR : gl.NEAREST;
+    const halfFloat = gl.HALF_FLOAT;
 
-                <!-- Project Card: NumStrata -->
-                <div class="group glass-card rounded-2xl overflow-hidden gradient-border transition-all duration-500 hover:shadow-[0_0_40px_rgba(56,189,248,0.08)] hover:-translate-y-1">
-                    <!-- Thumbnail -->
-                    <div class="relative h-52 sm:h-56 bg-gradient-to-br from-zinc-900 via-zinc-900 to-sky-950 flex items-center justify-center overflow-hidden">
-                        <!-- Decorative grid -->
-                        <div class="absolute inset-0 bg-[linear-gradient(rgba(56,189,248,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.04)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-                        <!-- Placeholder icon -->
-                        <div class="relative z-10 text-center">
-                            <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                                <i class="fas fa-puzzle-piece text-2xl text-sky-400"></i>
-                            </div>
-                            <p class="text-xs text-zinc-600 font-mono">screenshot / gameplay preview</p>
-                        </div>
-                        <!-- Platform badge -->
-                        <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 backdrop-blur-sm">
-                            <i class="fas fa-mobile-alt mr-1"></i> Mobile
-                        </div>
-                    </div>
-                    <!-- Content -->
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-3">
-                            <h3 class="text-xl font-bold text-white group-hover:text-sky-400 transition-colors duration-300">NumStrata</h3>
-                            <a href="#" class="text-zinc-600 hover:text-sky-400 transition-colors" aria-label="View project">
-                                <i class="fas fa-arrow-up-right-from-square text-sm"></i>
-                            </a>
-                        </div>
-                        <p class="text-zinc-400 text-sm leading-relaxed mb-5">
-                            A 2D pixel art <span class="text-zinc-300">math-based puzzle game</span> for mobile. Features optimized performance, clever UI architecture, and a smart level system designed for scalability and player engagement.
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">Unity 2D</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">C#</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">Pixel Art</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">AI Tools</span>
-                        </div>
-                    </div>
-                </div>
+    const simSize = getSimRes(SIM_RES);
+    const dyeSize = getSimRes(DYE_RES);
 
-                <!-- Project Card: PC Physics System -->
-                <div class="group glass-card rounded-2xl overflow-hidden gradient-border transition-all duration-500 hover:shadow-[0_0_40px_rgba(168,85,247,0.08)] hover:-translate-y-1">
-                    <!-- Thumbnail -->
-                    <div class="relative h-52 sm:h-56 bg-gradient-to-br from-zinc-900 via-zinc-900 to-purple-950 flex items-center justify-center overflow-hidden">
-                        <!-- Decorative grid -->
-                        <div class="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.04)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-                        <!-- Placeholder icon -->
-                        <div class="relative z-10 text-center">
-                            <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                                <i class="fas fa-atom text-2xl text-purple-400"></i>
-                            </div>
-                            <p class="text-xs text-zinc-600 font-mono">screenshot / demo preview</p>
-                        </div>
-                        <!-- Platform badge -->
-                        <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 backdrop-blur-sm">
-                            <i class="fas fa-desktop mr-1"></i> PC
-                        </div>
-                    </div>
-                    <!-- Content -->
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-3">
-                            <h3 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors duration-300">PC Physics System</h3>
-                            <a href="#" class="text-zinc-600 hover:text-purple-400 transition-colors" aria-label="View project">
-                                <i class="fas fa-arrow-up-right-from-square text-sm"></i>
-                            </a>
-                        </div>
-                        <p class="text-zinc-400 text-sm leading-relaxed mb-5">
-                            A 3D PC project centered on <span class="text-zinc-300">complex physics interactions</span>, collision handling, and systemic gameplay logic. Built with a focus on precise physics simulations and optimized through Vibe Coding workflows.
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">Unity 3D</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">C#</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">Physics Engine</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">AI Tools</span>
-                        </div>
-                    </div>
-                </div>
+    let velocity = createDoubleFBO(simSize.width, simSize.height, gl.RG16F, gl.RG, halfFloat, filter);
+    let dye = createDoubleFBO(dyeSize.width, dyeSize.height, gl.RGBA16F, gl.RGBA, halfFloat, filter);
+    let divergenceFBO = createFBO(simSize.width, simSize.height, gl.R16F, gl.RED, halfFloat, gl.NEAREST);
+    let curlFBO = createFBO(simSize.width, simSize.height, gl.R16F, gl.RED, halfFloat, gl.NEAREST);
+    let pressure = createDoubleFBO(simSize.width, simSize.height, gl.R16F, gl.RED, halfFloat, gl.NEAREST);
 
-            </div>
-        </div>
-    </section>
+    // Bloom FBOs
+    const bloomRes = getSimRes(256);
+    let bloomFBO = createFBO(bloomRes.width, bloomRes.height, gl.RGBA16F, gl.RGBA, halfFloat, filter);
+    let bloomFBOs = [];
+    for (let i = 0; i < 8; i++) {
+      let w = bloomRes.width >> (i + 1);
+      let h = bloomRes.height >> (i + 1);
+      if (w < 2 || h < 2) break;
+      bloomFBOs.push(createFBO(w, h, gl.RGBA16F, gl.RGBA, halfFloat, filter));
+    }
 
-    <!-- ==================== TECH STACK & SKILLS ==================== -->
-    <section id="skills" class="relative py-24 sm:py-32 px-4 sm:px-6">
-        <div class="max-w-4xl mx-auto reveal">
-            <!-- Section label -->
-            <div class="flex items-center gap-3 mb-14">
-                <span class="text-sm font-mono text-sky-400 tracking-wider uppercase">03</span>
-                <span class="h-px flex-1 bg-gradient-to-r from-zinc-800 to-transparent"></span>
-                <h2 class="text-2xl sm:text-3xl font-bold text-white">Tech Stack & Skills</h2>
-                <span class="h-px flex-1 bg-gradient-to-l from-zinc-800 to-transparent"></span>
-                <span class="text-sm font-mono text-zinc-600 tracking-wider">//</span>
-            </div>
+    // ========== SHADERS ==========
+    const baseVS = `#version 300 es
+precision highp float;
+layout(location=0) in vec2 aPosition;
+out vec2 vUv;
+out vec2 vL, vR, vT, vB;
+uniform vec2 texelSize;
+void main(){
+  vUv = aPosition * 0.5 + 0.5;
+  vL = vUv - vec2(texelSize.x, 0);
+  vR = vUv + vec2(texelSize.x, 0);
+  vT = vUv + vec2(0, texelSize.y);
+  vB = vUv - vec2(0, texelSize.y);
+  gl_Position = vec4(aPosition, 0, 1);
+}`;
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Game Development -->
-                <div class="space-y-4">
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-sky-400 flex items-center gap-2">
-                        <i class="fas fa-gamepad text-xs"></i> Game Development
-                    </h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">Unity Engine</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">C#</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">2D & 3D</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">Physics Systems</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-sky-500/40 transition-all duration-300 cursor-default">Mobile Optimization</span>
-                    </div>
-                </div>
+    const splatProg = createProgram(baseVS, `#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uTarget;
+uniform float aspectRatio;
+uniform vec3 color;
+uniform vec2 point;
+uniform float radius;
+void main(){
+  vec2 p = vUv - point;
+  p.x *= aspectRatio;
+  vec3 splat = exp(-dot(p,p) / radius) * color;
+  vec3 base = texture(uTarget, vUv).xyz;
+  fragColor = vec4(base + splat, 1.0);
+}`);
 
-                <!-- Architecture & Design -->
-                <div class="space-y-4">
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-teal-400 flex items-center gap-2">
-                        <i class="fas fa-cubes text-xs"></i> Architecture & Design
-                    </h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-teal-500/40 transition-all duration-300 cursor-default">System Design</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-teal-500/40 transition-all duration-300 cursor-default">Game Architecture</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-teal-500/40 transition-all duration-300 cursor-default">Level Design</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-teal-500/40 transition-all duration-300 cursor-default">Backend Logic</span>
-                    </div>
-                </div>
+    const advectionProg = createProgram(baseVS, `#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uVelocity;
+uniform sampler2D uSource;
+uniform vec2 texelSize;
+uniform float dt;
+uniform float dissipation;
+void main(){
+  vec2 coord = vUv - dt * texture(uVelocity, vUv).xy * texelSize;
+  vec4 result = texture(uSource, coord);
+  float decay = 1.0 + dissipation * dt;
+  fragColor = result / decay;
+}`);
 
-                <!-- AI & Tools -->
-                <div class="space-y-4">
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-purple-400 flex items-center gap-2">
-                        <i class="fas fa-wand-magic-sparkles text-xs"></i> AI & Workflow
-                    </h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">AI-First Dev</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">Vibe Coding</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">Prompt Engineering</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">GitHub Copilot</span>
-                        <span class="px-4 py-2 glass-card rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:border-purple-500/40 transition-all duration-300 cursor-default">Rapid Prototyping</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    const divergenceProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+in vec2 vUv, vL, vR, vT, vB;
+out vec4 fragColor;
+uniform sampler2D uVelocity;
+void main(){
+  float L = texture(uVelocity, vL).x;
+  float R = texture(uVelocity, vR).x;
+  float T = texture(uVelocity, vT).y;
+  float B = texture(uVelocity, vB).y;
+  vec2 C = texture(uVelocity, vUv).xy;
+  if(vL.x < 0.0) L = -C.x;
+  if(vR.x > 1.0) R = -C.x;
+  if(vT.y > 1.0) T = -C.y;
+  if(vB.y < 0.0) B = -C.y;
+  fragColor = vec4(0.5 * (R - L + T - B), 0, 0, 1);
+}`);
 
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="relative py-12 px-4 sm:px-6 border-t border-zinc-800/50">
-        <div class="max-w-4xl mx-auto">
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <span class="text-lg font-bold text-white">Salt<span class="text-sky-400">.</span></span>
-                    <span class="text-zinc-700">|</span>
-                    <span class="text-sm text-zinc-500">Phạm Minh Phát</span>
-                </div>
-                <div class="flex items-center gap-4">
-                    <a href="https://github.com/Salt05" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-600 transition-all duration-300 hover:scale-110">
-                        <i class="fab fa-github text-sm"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="mt-8 pt-6 border-t border-zinc-800/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-600">
-                <p>&copy; 2026 Phạm Minh Phát. Built with an AI-First mindset.</p>
-                <p class="font-mono">phatpham.id.vn</p>
-            </div>
-        </div>
-    </footer>
+    const curlProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+in vec2 vUv, vL, vR, vT, vB;
+out vec4 fragColor;
+uniform sampler2D uVelocity;
+void main(){
+  float L = texture(uVelocity, vL).y;
+  float R = texture(uVelocity, vR).y;
+  float T = texture(uVelocity, vT).x;
+  float B = texture(uVelocity, vB).x;
+  fragColor = vec4(0.5 * (R - L - T + B), 0, 0, 1);
+}`);
 
-    <!-- ==================== SCRIPTS ==================== -->
-    <script>
-        // Navbar: show after scrolling past hero
-        const navbar = document.getElementById('navbar');
-        const hero = document.getElementById('hero');
-        const observerNav = new IntersectionObserver(
-            ([entry]) => {
-                if (!entry.isIntersecting) {
-                    navbar.style.opacity = '1';
-                    navbar.style.transform = 'translateX(-50%) translateY(0)';
-                } else {
-                    navbar.style.opacity = '0';
-                    navbar.style.transform = 'translateX(-50%) translateY(-20px)';
-                }
-            },
-            { threshold: 0.15 }
-        );
-        observerNav.observe(hero);
+    const vorticityProg = createProgram(baseVS, `#version 300 es
+precision highp float;
+in vec2 vUv, vL, vR, vT, vB;
+out vec4 fragColor;
+uniform sampler2D uVelocity;
+uniform sampler2D uCurl;
+uniform float curl;
+uniform float dt;
+void main(){
+  float L = texture(uCurl, vL).x;
+  float R = texture(uCurl, vR).x;
+  float T = texture(uCurl, vT).x;
+  float B = texture(uCurl, vB).x;
+  float C = texture(uCurl, vUv).x;
+  vec2 force = 0.5 * vec2(abs(T) - abs(B), abs(R) - abs(L));
+  force /= length(force) + 0.0001;
+  force *= curl * C;
+  force.y *= -1.0;
+  vec2 vel = texture(uVelocity, vUv).xy;
+  fragColor = vec4(vel + force * dt, 0, 1);
+}`);
 
-        // Scroll reveal sections
-        const reveals = document.querySelectorAll('.reveal');
-        const observerReveal = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            },
-            { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-        );
-        reveals.forEach((el) => observerReveal.observe(el));
+    const pressureProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+in vec2 vUv, vL, vR, vT, vB;
+out vec4 fragColor;
+uniform sampler2D uPressure;
+uniform sampler2D uDivergence;
+void main(){
+  float L = texture(uPressure, vL).x;
+  float R = texture(uPressure, vR).x;
+  float T = texture(uPressure, vT).x;
+  float B = texture(uPressure, vB).x;
+  float div = texture(uDivergence, vUv).x;
+  fragColor = vec4((L + R + B + T - div) * 0.25, 0, 0, 1);
+}`);
 
-        // Smooth active nav link highlighting
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('nav a[href^="#"]');
-        const observerActive = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        navLinks.forEach((link) => {
-                            link.classList.remove('text-white', 'bg-white/5');
-                            if (link.getAttribute('href') === '#' + entry.target.id) {
-                                link.classList.add('text-white', 'bg-white/5');
-                            }
-                        });
-                    }
-                });
-            },
-            { threshold: 0.3 }
-        );
-        sections.forEach((sec) => observerActive.observe(sec));
-    </script>
+    const gradSubProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+in vec2 vUv, vL, vR, vT, vB;
+out vec4 fragColor;
+uniform sampler2D uPressure;
+uniform sampler2D uVelocity;
+void main(){
+  float L = texture(uPressure, vL).x;
+  float R = texture(uPressure, vR).x;
+  float T = texture(uPressure, vT).x;
+  float B = texture(uPressure, vB).x;
+  vec2 vel = texture(uVelocity, vUv).xy;
+  vel -= vec2(R - L, T - B);
+  fragColor = vec4(vel, 0, 1);
+}`);
 
+    const clearProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uTexture;
+uniform float value;
+void main(){
+  fragColor = value * texture(uTexture, vUv);
+}`);
+
+    const displayProg = createProgram(baseVS, `#version 300 es
+precision highp float;
+in vec2 vUv, vL, vR, vT, vB;
+out vec4 fragColor;
+uniform sampler2D uTexture;
+uniform sampler2D uBloom;
+uniform vec2 texelSize;
+void main(){
+  vec3 c = texture(uTexture, vUv).rgb;
+  // Shading
+  vec3 lc = texture(uTexture, vL).rgb;
+  vec3 rc = texture(uTexture, vR).rgb;
+  vec3 tc = texture(uTexture, vT).rgb;
+  vec3 bc = texture(uTexture, vB).rgb;
+  float dx = length(rc) - length(lc);
+  float dy = length(tc) - length(bc);
+  vec3 n = normalize(vec3(dx, dy, length(texelSize)));
+  float diffuse = clamp(dot(n, vec3(0,0,1)) + 0.7, 0.7, 1.0);
+  c *= diffuse;
+  // Bloom
+  vec3 bloom = texture(uBloom, vUv).rgb;
+  c += bloom;
+  fragColor = vec4(c, 1.0);
+}`);
+
+    const bloomPrefilterProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uTexture;
+uniform vec3 curve;
+uniform float threshold;
+void main(){
+  vec3 c = texture(uTexture, vUv).rgb;
+  float br = max(c.r, max(c.g, c.b));
+  float rq = clamp(br - curve.x, 0.0, curve.y);
+  rq = curve.z * rq * rq;
+  c *= max(rq, br - threshold) / max(br, 0.0001);
+  fragColor = vec4(c, 0);
+}`);
+
+    const bloomBlurProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+in vec2 vL, vR, vT, vB;
+out vec4 fragColor;
+uniform sampler2D uTexture;
+void main(){
+  fragColor = 0.25 * (texture(uTexture,vL) + texture(uTexture,vR) + texture(uTexture,vT) + texture(uTexture,vB));
+}`);
+
+    const bloomFinalProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+in vec2 vL, vR, vT, vB;
+out vec4 fragColor;
+uniform sampler2D uTexture;
+uniform float intensity;
+void main(){
+  fragColor = intensity * 0.25 * (texture(uTexture,vL) + texture(uTexture,vR) + texture(uTexture,vT) + texture(uTexture,vB));
+}`);
+
+    const colorProg = createProgram(baseVS, `#version 300 es
+precision mediump float;
+out vec4 fragColor;
+uniform vec4 color;
+void main(){ fragColor = color; }`);
+
+    // ========== SIMULATION ==========
+    function splat(x, y, dx, dy, color, radius) {
+      splatProg.bind();
+      gl.uniform1i(splatProg.uniforms.uTarget, velocity.read.attach(0));
+      gl.uniform1f(splatProg.uniforms.aspectRatio, canvas.width / canvas.height);
+      gl.uniform2f(splatProg.uniforms.point, x, y);
+      gl.uniform3f(splatProg.uniforms.color, dx, -dy, 0);
+      gl.uniform1f(splatProg.uniforms.radius, radius);
+      blit(velocity.write);
+      velocity.swap();
+
+      gl.uniform1i(splatProg.uniforms.uTarget, dye.read.attach(0));
+      gl.uniform3f(splatProg.uniforms.color, color.r, color.g, color.b);
+      blit(dye.write);
+      dye.swap();
+    }
+
+    function step(dt) {
+      gl.disable(gl.BLEND);
+
+      // Curl
+      curlProg.bind();
+      gl.uniform2f(curlProg.uniforms.texelSize, velocity.read.width > 0 ? 1.0 / velocity.read.width : 0, velocity.read.height > 0 ? 1.0 / velocity.read.height : 0);
+      gl.uniform1i(curlProg.uniforms.uVelocity, velocity.read.attach(0));
+      blit(curlFBO);
+
+      // Vorticity
+      vorticityProg.bind();
+      gl.uniform2f(vorticityProg.uniforms.texelSize, 1.0 / velocity.read.width, 1.0 / velocity.read.height);
+      gl.uniform1i(vorticityProg.uniforms.uVelocity, velocity.read.attach(0));
+      gl.uniform1i(vorticityProg.uniforms.uCurl, curlFBO.attach(1));
+      gl.uniform1f(vorticityProg.uniforms.curl, CURL_STRENGTH);
+      gl.uniform1f(vorticityProg.uniforms.dt, dt);
+      blit(velocity.write);
+      velocity.swap();
+
+      // Divergence
+      divergenceProg.bind();
+      gl.uniform2f(divergenceProg.uniforms.texelSize, 1.0 / velocity.read.width, 1.0 / velocity.read.height);
+      gl.uniform1i(divergenceProg.uniforms.uVelocity, velocity.read.attach(0));
+      blit(divergenceFBO);
+
+      // Pressure clear
+      clearProg.bind();
+      gl.uniform1i(clearProg.uniforms.uTexture, pressure.read.attach(0));
+      gl.uniform1f(clearProg.uniforms.value, 0.8);
+      blit(pressure.write);
+      pressure.swap();
+
+      // Pressure solve
+      pressureProg.bind();
+      gl.uniform2f(pressureProg.uniforms.texelSize, 1.0 / velocity.read.width, 1.0 / velocity.read.height);
+      gl.uniform1i(pressureProg.uniforms.uDivergence, divergenceFBO.attach(0));
+      for (let i = 0; i < PRESSURE_ITERATIONS; i++) {
+        gl.uniform1i(pressureProg.uniforms.uPressure, pressure.read.attach(1));
+        blit(pressure.write);
+        pressure.swap();
+      }
+
+      // Gradient subtract
+      gradSubProg.bind();
+      gl.uniform2f(gradSubProg.uniforms.texelSize, 1.0 / velocity.read.width, 1.0 / velocity.read.height);
+      gl.uniform1i(gradSubProg.uniforms.uPressure, pressure.read.attach(0));
+      gl.uniform1i(gradSubProg.uniforms.uVelocity, velocity.read.attach(1));
+      blit(velocity.write);
+      velocity.swap();
+
+      // Advect velocity
+      advectionProg.bind();
+      gl.uniform2f(advectionProg.uniforms.texelSize, 1.0 / velocity.read.width, 1.0 / velocity.read.height);
+      gl.uniform1i(advectionProg.uniforms.uVelocity, velocity.read.attach(0));
+      gl.uniform1i(advectionProg.uniforms.uSource, velocity.read.attach(0));
+      gl.uniform1f(advectionProg.uniforms.dt, dt);
+      gl.uniform1f(advectionProg.uniforms.dissipation, VELOCITY_DISSIPATION);
+      blit(velocity.write);
+      velocity.swap();
+
+      // Advect dye
+      gl.uniform1i(advectionProg.uniforms.uVelocity, velocity.read.attach(0));
+      gl.uniform1i(advectionProg.uniforms.uSource, dye.read.attach(1));
+      gl.uniform1f(advectionProg.uniforms.dissipation, DENSITY_DISSIPATION);
+      blit(dye.write);
+      dye.swap();
+    }
+
+    function applyBloom() {
+      if (bloomFBOs.length < 2) return;
+
+      gl.disable(gl.BLEND);
+
+      // Prefilter
+      bloomPrefilterProg.bind();
+      const knee = BLOOM_THRESHOLD * 0.7 + 0.0001;
+      gl.uniform3f(bloomPrefilterProg.uniforms.curve, BLOOM_THRESHOLD - knee, knee * 2, 0.25 / knee);
+      gl.uniform1f(bloomPrefilterProg.uniforms.threshold, BLOOM_THRESHOLD);
+      gl.uniform1i(bloomPrefilterProg.uniforms.uTexture, dye.read.attach(0));
+      blit(bloomFBO);
+
+      // Downsample
+      bloomBlurProg.bind();
+      let last = bloomFBO;
+      for (let i = 0; i < bloomFBOs.length; i++) {
+        const dest = bloomFBOs[i];
+        gl.uniform2f(bloomBlurProg.uniforms.texelSize, 1.0 / last.width, 1.0 / last.height);
+        gl.uniform1i(bloomBlurProg.uniforms.uTexture, last.attach(0));
+        blit(dest);
+        last = dest;
+      }
+
+      // Upsample
+      gl.blendFunc(gl.ONE, gl.ONE);
+      gl.enable(gl.BLEND);
+      for (let i = bloomFBOs.length - 2; i >= 0; i--) {
+        const base = bloomFBOs[i];
+        gl.uniform2f(bloomBlurProg.uniforms.texelSize, 1.0 / last.width, 1.0 / last.height);
+        gl.uniform1i(bloomBlurProg.uniforms.uTexture, last.attach(0));
+        gl.viewport(0, 0, base.width, base.height);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, base.fbo);
+        gl.bindVertexArray(quadVAO);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        gl.bindVertexArray(null);
+        last = base;
+      }
+      gl.disable(gl.BLEND);
+
+      // Final bloom pass
+      bloomFinalProg.bind();
+      gl.uniform2f(bloomFinalProg.uniforms.texelSize, 1.0 / last.width, 1.0 / last.height);
+      gl.uniform1i(bloomFinalProg.uniforms.uTexture, last.attach(0));
+      gl.uniform1f(bloomFinalProg.uniforms.intensity, BLOOM_INTENSITY);
+      blit(bloomFBO);
+    }
+
+    function render() {
+      applyBloom();
+
+      const w = gl.drawingBufferWidth;
+      const h = gl.drawingBufferHeight;
+
+      gl.viewport(0, 0, w, h);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+      // Draw background
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.enable(gl.BLEND);
+
+      colorProg.bind();
+      gl.uniform4f(colorProg.uniforms.color, 3 / 255, 5 / 255, 8 / 255, 1);
+      gl.bindVertexArray(quadVAO);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      gl.bindVertexArray(null);
+
+      // Display dye + bloom
+      displayProg.bind();
+      gl.uniform2f(displayProg.uniforms.texelSize, 1.0 / w, 1.0 / h);
+      gl.uniform1i(displayProg.uniforms.uTexture, dye.read.attach(0));
+      gl.uniform1i(displayProg.uniforms.uBloom, bloomFBO.attach(1));
+      gl.bindVertexArray(quadVAO);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      gl.bindVertexArray(null);
+    }
+
+    // ========== MOUSE ==========
+    let mouseX = 0, mouseY = 0, prevMouseX = 0, prevMouseY = 0, mouseMoved = false;
+
+    window.addEventListener('mousemove', e => {
+      prevMouseX = mouseX;
+      prevMouseY = mouseY;
+      mouseX = e.clientX / canvas.clientWidth;
+      mouseY = 1.0 - e.clientY / canvas.clientHeight;
+      mouseMoved = true;
+    });
+
+    canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      if (e.touches.length > 0) {
+        prevMouseX = mouseX;
+        prevMouseY = mouseY;
+        mouseX = e.touches[0].clientX / canvas.clientWidth;
+        mouseY = 1.0 - e.touches[0].clientY / canvas.clientHeight;
+        mouseMoved = true;
+      }
+    }, { passive: false });
+
+    // ========== MAIN LOOP ==========
+    let lastTime = Date.now();
+
+    function loop() {
+      const now = Date.now();
+      const dt = Math.min((now - lastTime) / 1000, 0.016);
+      lastTime = now;
+
+      // Right-edge emitter: constant stream of white/blue fluid
+      const emitX = 0.90; // UV position (90% from left = near right edge)
+      const emitY = 0.5 + Math.sin(now * 0.001) * 0.1; // Slight vertical oscillation
+      const emitR = SPLAT_RADIUS * 5;
+      const colorIntensity = 15;
+      const emitColor = {
+        r: (0.85 + Math.random() * 0.15) * colorIntensity,
+        g: (0.90 + Math.random() * 0.10) * colorIntensity,
+        b: 1.0 * colorIntensity
+      };
+      // Push fluid leftward
+      splat(emitX, emitY, -50, (Math.random() - 0.5) * 15, emitColor, emitR);
+
+      // Secondary wider emitter
+      const emitY2 = 0.3 + Math.random() * 0.4;
+      const emitColor2 = {
+        r: 0.9 * colorIntensity * 0.7,
+        g: 0.95 * colorIntensity * 0.7,
+        b: 1.0 * colorIntensity * 0.7
+      };
+      splat(0.96, emitY2, -30, (Math.random() - 0.5) * 10, emitColor2, SPLAT_RADIUS * 3);
+
+      // Mouse interaction: push velocity only (no dye)
+      if (mouseMoved) {
+        mouseMoved = false;
+        const dx = (mouseX - prevMouseX) * 50;
+        const dy = (mouseY - prevMouseY) * 50;
+        if (Math.abs(dx) > 0.001 || Math.abs(dy) > 0.001) {
+          splat(mouseX, mouseY, dx, dy, { r: 0, g: 0, b: 0 }, SPLAT_RADIUS);
+        }
+      }
+
+      step(dt);
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    loop();
+  </script>
 </body>
+
 </html>
